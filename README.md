@@ -1,49 +1,49 @@
 # QRIS Payment Simple
 
-Payment gateway untuk **merchant.qris.interactive.co.id** dengan auto-verification.
+Payment gateway for **merchant.qris.interactive.co.id** with auto-verification.
 
 ---
 
-## Apa Ini?
+## What Is This?
 
-Plugin/node/server buat terima pembayaran QRIS. Tinggal colok, langsung bisa terima uang.
+A plugin/node/server to receive QRIS payments. Just plug in and start accepting money.
 
-### Fungsi:
+### Features:
 
-- **Auto-Verification** - Pembayaran langsung verified tanpa harus cek manual
-- **Real-time** - Dapet update pembayaran langsung (SSE)
-- **Suffix System** - Tiap payment dapet nominal unik (Rp 99,099) biar gampang dicocokkan
-- **SSE / Webhook** - Notifikasi ke app kamu pas pembayaran berhasil
-- **SQLite** - Database sederhana, nggak perlu setup server
+- **Auto-Verification** - Payments verified automatically, no manual check needed
+- **Real-time** - Get payment updates instantly (SSE)
+- **Suffix System** - Each payment gets unique amount (Rp 99,099) for easy matching
+- **SSE / Webhook** - Notification to your app when payment succeeds
+- **SQLite** - Simple database, no server setup needed
 
 ---
 
-## Cara Kerja
+## How It Works
 
 ```
-Customer bayar QRIS → Dana masuk ke merchant.qris.interactive.co.id →
-Gateway detect → Payment auto verified → App kamu dapet notifikasi
+Customer pays QRIS → Money goes to merchant.qris.interactive.co.id →
+Gateway detects → Payment auto verified → Your app gets notification
 ```
 
-1. Customer scan QRIS
-2. Bayar
-3. Dana masuk ke dashboard merchant.qris.interactive.co.id
-4. Gateway otomatis nge-detect pembayaran
-5. Payment mark SUCCESS
-6. App kamu dapet real-time notification
+1. Customer scans QRIS
+2. Pays
+3. Money arrives at merchant.qris.interactive.co.id dashboard
+4. Gateway automatically detects the payment
+5. Payment marked as SUCCESS
+6. Your app gets real-time notification
 
 ---
 
-## Fitur
+## Features
 
-- ✅ Auto-verification pembayaran
-- ✅ Real-time update (SSE)
+- ✅ Auto-verification payments
+- ✅ Real-time updates (SSE)
 - ✅ QRIS static to dynamic
 - ✅ Webhook support
-- ✅ Admin dashboard (list payment, mark paid/failed)
+- ✅ Admin dashboard (list payments, mark paid/failed)
 - ✅ Rate limiting & security
 - ✅ SQLite database
-- ✅ Auto expire payment
+- ✅ Auto expire payments
 
 ---
 
@@ -70,24 +70,24 @@ HASH_PEPPER=
 1. Clone/Install
 2. Setup `.env`
 3. `node standalone.js`
-4. Siap terima pembayaran
+4. Start accepting payments
 
 ---
 
-## Endpoint Utama
+## Main Endpoints
 
-| Endpoint | Fungsi |
-|----------|--------|
-| POST `/api/payment/create` | Buat pembayaran |
-| GET `/api/payment/status/:id` | Cek status |
+| Endpoint | Function |
+|----------|----------|
+| POST `/api/payment/create` | Create payment |
+| GET `/api/payment/status/:id` | Check status |
 | GET `/api/payment/stream/:id` | Real-time update |
-| GET `/api/payment/admin/dashboard` | Dashboard admin |
+| GET `/api/payment/admin/dashboard` | Admin dashboard |
 
 ---
 
 ## Deploy
 
-Standalone - bisa jalan di Render, Railway, VPS, dll.
+Standalone - works on Render, Railway, VPS, etc.
 
 ```bash
 npm install

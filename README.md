@@ -6,7 +6,7 @@ Payment gateway for **merchant.qris.interactive.co.id** with auto-verification.
 
 ## What Is This?
 
-A plugin/node/server to receive QRIS payments. Just plug in and start accepting money.
+A plugin/node/server to receive QRIS payments. Just plug in and start **accepting money**.
 
 ### Features:
 

@@ -15,6 +15,11 @@
  *   PORT - Server port (default: 3000)
  *   NODE_ENV - development or production
  *   MUTATION_COLLECTOR_ENABLED - Enable auto-collector (true/false)
+ *
+ * QRIS Interactive Provider (merchant.qris.interactive.co.id):
+ *   QRIS_INTERACTIVE_EMAIL - Merchant email
+ *   QRIS_INTERACTIVE_PASSWORD - Merchant password
+ *   QRIS_LOOKBACK_DAYS - Days to look back (default: 1)
  */
 
 const { createPaymentApp } = require('./src');
@@ -127,10 +132,12 @@ const app = createPaymentApp({
     hashPepper: process.env.HASH_PEPPER
   },
 
-  // Collector
+  // Collector (uses QRIS Interactive by default)
   collector: {
     enabled: process.env.MUTATION_COLLECTOR_ENABLED === 'true',
-    frequencyMs: parseInt(process.env.COLLECTOR_FREQUENCY_MS) || 5000
+    email: process.env.QRIS_INTERACTIVE_EMAIL,
+    password: process.env.QRIS_INTERACTIVE_PASSWORD,
+    lookbackDays: parseInt(process.env.QRIS_LOOKBACK_DAYS) || 1
   },
 
   // Hooks

@@ -40,6 +40,7 @@ const { createBroadcaster } = require('./payments/payment-broadcaster');
 const { createExpirySweeper } = require('./payments/expiry-sweeper');
 const { createSelfHealingCollector } = require('./payments/self-healing-collector');
 const { createMockMutationProvider } = require('./providers/mock-provider');
+const { createQrisInteractiveProvider } = require('./providers/qris-interactive-provider');
 const { createPaymentRouter } = require('./routes/payment');
 const { createAdminRouter } = require('./routes/admin');
 const { createWebhookRouter } = require('./routes/webhook');
@@ -234,10 +235,20 @@ function createPaymentApp(options = {}) {
   // Start collector if enabled
   let collector = null;
   if (options.collector?.enabled) {
-    // Get provider
-    const provider = options.customProvider || createMockMutationProvider({
-      frequencyMs: options.collector.frequencyMs || 5000
-    });
+    let provider;
+
+    // Use custom provider if provided
+    if (options.customProvider) {
+      provider = options.customProvider;
+    } else {
+      // Default to QRIS Interactive provider
+      provider = createQrisInteractiveProvider({
+        email: options.collector.email || process.env.QRIS_INTERACTIVE_EMAIL,
+        password: options.collector.password || process.env.QRIS_INTERACTIVE_PASSWORD,
+        lookbackDays: options.collector.lookbackDays || 1,
+        debug: process.env.DEBUG === 'true'
+      });
+    }
 
     collector = createSelfHealingCollector({
       db,
@@ -347,6 +358,7 @@ module.exports = {
   createExpirySweeper,
   createSelfHealingCollector,
   createMockMutationProvider,
+  createQrisInteractiveProvider,
   loadConfig,
   initDatabase,
   closeDatabase

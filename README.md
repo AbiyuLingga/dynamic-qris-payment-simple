@@ -1,95 +1,95 @@
 # QRIS Payment Simple
 
-Auto-verification gateway untuk **merchant.qris.interactive.co.id**.
+Payment gateway untuk **merchant.qris.interactive.co.id** dengan auto-verification.
 
-## Setup
+---
 
-```bash
-npm install qris-payment-simple
+## Apa Ini?
+
+Plugin/node/server buat terima pembayaran QRIS. Tinggal colok, langsung bisa terima uang.
+
+### Fungsi:
+
+- **Auto-Verification** - Pembayaran langsung verified tanpa harus cek manual
+- **Real-time** - Dapet update pembayaran langsung (SSE)
+- **Suffix System** - Tiap payment dapet nominal unik (Rp 99,099) biar gampang dicocokkan
+- **SSE / Webhook** - Notifikasi ke app kamu pas pembayaran berhasil
+- **SQLite** - Database sederhana, nggak perlu setup server
+
+---
+
+## Cara Kerja
+
+```
+Customer bayar QRIS → Dana masuk ke merchant.qris.interactive.co.id →
+Gateway detect → Payment auto verified → App kamu dapet notifikasi
 ```
 
-Buat `.env`:
+1. Customer scan QRIS
+2. Bayar
+3. Dana masuk ke dashboard merchant.qris.interactive.co.id
+4. Gateway otomatis nge-detect pembayaran
+5. Payment mark SUCCESS
+6. App kamu dapet real-time notification
 
-```bash
-QRIS_STATIC_STRING=00020101021126360009...
+---
 
-MUTATION_COLLECTOR_ENABLED=true
-QRIS_INTERACTIVE_EMAIL=email@merchant.qris.interactive.co.id
-QRIS_INTERACTIVE_PASSWORD=password
+## Fitur
 
-PAYMENT_WEBHOOK_SECRET=secret
-HASH_PEPPER=pepper
-```
+- ✅ Auto-verification pembayaran
+- ✅ Real-time update (SSE)
+- ✅ QRIS static to dynamic
+- ✅ Webhook support
+- ✅ Admin dashboard (list payment, mark paid/failed)
+- ✅ Rate limiting & security
+- ✅ SQLite database
+- ✅ Auto expire payment
 
-## Usage
-
-```javascript
-const { createPaymentApp } = require('qris-payment-simple');
-
-const app = createPaymentApp({
-  qris: { staticString: process.env.QRIS_STATIC_STRING },
-  collector: {
-    enabled: true,
-    email: process.env.QRIS_INTERACTIVE_EMAIL,
-    password: process.env.QRIS_INTERACTIVE_PASSWORD
-  },
-  hooks: {
-    onPaymentSuccess: async (db, payment) => {
-      // grant access
-    }
-  }
-});
-
-app.listen(3000);
-```
-
-## Run
-
-```bash
-node standalone.js
-```
-
-## API
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/payment/create` | Create payment |
-| GET | `/api/payment/status/:id` | Check status |
-| GET | `/api/payment/stream/:id` | Real-time update |
-| POST | `/api/payment/webhook/verify` | Webhook |
-
-## Create Payment
-
-```bash
-curl -X POST http://localhost:3000/api/payment/create \
-  -H "Content-Type: application/json" \
-  -d '{
-    "amount": 99000,
-    "description": "Premium",
-    "email": "user@example.com"
-  }'
-```
+---
 
 ## Environment Variables
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `QRIS_STATIC_STRING` | Yes | QRIS static string |
-| `QRIS_INTERACTIVE_EMAIL` | Yes* | Email merchant dashboard |
-| `QRIS_INTERACTIVE_PASSWORD` | Yes* | Password merchant dashboard |
-| `PAYMENT_WEBHOOK_SECRET` | Yes** | HMAC secret |
-| `HASH_PEPPER` | Yes** | Hash pepper |
-| `QRIS_MERCHANT_NAME` | No | Nama merchant di QR (default: Payment Gateway) |
-| `QRIS_EXPIRY_MINUTES` | No | Expiry payment (default: 20) |
-| `QRIS_LOOKBACK_DAYS` | No | Hari lookback mutation (default: 1) |
+```bash
+# QRIS
+QRIS_STATIC_STRING=
 
-*Required jika `MUTATION_COLLECTOR_ENABLED=true`
-**Required di production
+# QRIS Interactive (merchant.qris.interactive.co.id)
+QRIS_INTERACTIVE_EMAIL=
+QRIS_INTERACTIVE_PASSWORD=
+MUTATION_COLLECTOR_ENABLED=true
+
+# Security
+PAYMENT_WEBHOOK_SECRET=
+HASH_PEPPER=
+```
+
+---
+
+## Quick Start
+
+1. Clone/Install
+2. Setup `.env`
+3. `node standalone.js`
+4. Siap terima pembayaran
+
+---
+
+## Endpoint Utama
+
+| Endpoint | Fungsi |
+|----------|--------|
+| POST `/api/payment/create` | Buat pembayaran |
+| GET `/api/payment/status/:id` | Cek status |
+| GET `/api/payment/stream/:id` | Real-time update |
+| GET `/api/payment/admin/dashboard` | Dashboard admin |
+
+---
 
 ## Deploy
 
+Standalone - bisa jalan di Render, Railway, VPS, dll.
+
 ```bash
-# Render, Railway, dll
-git push
-npm start
+npm install
+node standalone.js
 ```

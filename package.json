@@ -1,0 +1,42 @@
+{
+  "name": "qris-payment-simple",
+  "version": "1.0.0",
+  "description": "Standalone, pluggable QRIS payment gateway for Node.js/Express",
+  "main": "src/index.js",
+  "types": "src/types/index.d.ts",
+  "scripts": {
+    "start": "node standalone.js",
+    "dev": "NODE_ENV=development node standalone.js",
+    "test": "jest --coverage",
+    "test:unit": "jest tests/unit",
+    "test:integration": "jest tests/integration",
+    "db:init": "node scripts/init-db.js"
+  },
+  "keywords": [
+    "qris",
+    "payment",
+    "gateway",
+    "indonesia",
+    "qr-code"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@prasetya/qris": "^1.0.0",
+    "better-sqlite3": "^9.4.0",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "qrcode": "^1.5.3",
+    "cookie-parser": "^1.4.6"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3"
+  },
+  "peerDependencies": {
+    "express": "^4.18.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
